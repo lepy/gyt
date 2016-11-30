@@ -8,8 +8,8 @@ import logging
 
 class Folder(object):
     """emulate a Folder"""
-    _columns = ["name", "mod", "hash"]
-    CONTENTFILEPATH = ".gyt"
+    _columns = ["filename", "mod", "hash"]
+    CONTENTFILENAME = ".gyt"
 
     def __init__(self, *args, **kwargs):
         self.path = kwargs.get("path") or os.getcwd()
@@ -25,11 +25,15 @@ class Folder(object):
         self.name = kwargs.get("name") or "N.N."
 
     @property
+    def contentfilepath(self):
+        return os.path.join(self.path, self.CONTENTFILENAME)
+
+    @property
     def content(self):
         return self._content
 
-    def import_files(self, path):
-        self.get_content(path)
+    def import_files(self):
+        self.get_content_status()
         self.dump()
 
     def get_hash(self, filepath):
@@ -53,7 +57,8 @@ class Folder(object):
         """list dir"""
         return self._content
 
-    def get_content(self, path):
+    def get_content_status(self):
+        path = self.path
         content = self.content
         df0 = pd.DataFrame(columns=self._columns)
         df0.index.name = "idx"
@@ -63,18 +68,22 @@ class Folder(object):
             filenames = os.listdir(path)
             dfdict = {}
             for filename in filenames:
-                if filename == self.CONTENTFILEPATH:
+                if filename == self.CONTENTFILENAME:
                     continue
                 hash = self.get_hash(os.path.join(path, filename))
-                print("!!!", filename, hash, any(content.name.isin([filename])))
-                if not any(content.name.isin([filename])):
+                print("!!!", filename, hash, any(content.filename.isin([filename])))
+                if not any(content.filename.isin([filename])):
                     print("newfile")
-                    dfdict[uuid.uuid4().hex] = {"name":filename, "mod":False, "hash":hash}
-                elif filename not in content.name:
-                    file_row = content[content.hash==hash]
-                    print("file '%s' exist" % filename, file_row.to_dict())
-                    # dfdict[file_row.idx]
-                    #print("row", file_row.to_dict())
+                    dfdict[uuid.uuid4().hex] = {"filename":filename, "mod":False, "hash":hash}
+                elif any(content.filename.isin([filename])):
+                    file_row = content[content.filename==filename].iloc[0]
+                    print("file '%s' exist" % filename)
+                    print("!", (file_row.name, file_row["filename"]))
+                    if file_row.hash!=hash:
+                        print("file changed")
+                        self._content.ix[file_row.name, 'mod'] = True
+                    else:
+                        self._content.ix[file_row.name, 'mod'] = False
 
             df = pd.DataFrame.from_dict(dfdict, orient="index")
             df.index.name = "idx"
@@ -86,12 +95,12 @@ class Folder(object):
 
     def dump(self):
         """dump content"""
-        self._content.to_csv(os.path.join(self.CONTENTFILEPATH), index_label="idx")
+        self._content.to_csv(os.path.join(self.contentfilepath), index_label="idx")
 
     def load(self):
         """load content"""
-        if os.path.exists(self.CONTENTFILEPATH):
-            df = pd.read_csv(self.CONTENTFILEPATH)
+        if os.path.exists(self.contentfilepath):
+            df = pd.read_csv(self.contentfilepath)
             df.index = df["idx"]
             # print("!!", df.head())
             # print(df.index)
@@ -99,7 +108,7 @@ class Folder(object):
         return self._content
 
 if __name__ == '__main__':
-    os.remove(Folder.CONTENTFILEPATH)
+    os.remove(Folder.contentfilepath)
     f = Folder(name="root", path=os.getcwd())
     f.import_files(os.getcwd())
     print(f)

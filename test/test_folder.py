@@ -7,17 +7,38 @@ import pandas as pd
 modulepath = os.path.dirname(__file__)
 
 def test_folder():
-    # if os.path.exists(gyt.folder.Folder.CONTENTFILEPATH):
-    #     os.remove(gyt.folder.Folder.CONTENTFILEPATH)
-
     foldername = "project0815"
     projectpath = os.path.join(modulepath, foldername)
+
+    contentfilepath = os.path.join(projectpath, gyt.folder.Folder.CONTENTFILENAME)
+    if os.path.exists(contentfilepath):
+        os.remove(contentfilepath)
+
+    newfile = os.path.join(projectpath, "new.txt")
+    readme = os.path.join(projectpath, "README")
+    if os.path.exists(newfile):
+        os.remove(newfile)
+
+    with open(readme, "w") as fh:
+        fh.write("hello world")
+
+    print(os.listdir(projectpath))
+
     f = gyt.folder.Folder(name=foldername, path=projectpath)
-    f.import_files(projectpath)
+    f.import_files()
+    f.get_content_status()
+    print("!1", f.content)
     # print(f)
     # print(f.ls())
     # print("!", f.load().columns)
-    print("!", f.content)
+    with open(readme, "w") as fh:
+        fh.write("hello world!")
+
+    with open(newfile, "w") as fh:
+        fh.write("hello world!")
+
+    f.get_content_status()
+    print("!2", f.content)
     assert f.name == foldername, f.name
 
 def test_dump():
