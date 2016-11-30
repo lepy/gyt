@@ -9,7 +9,7 @@ import logging
 class Folder(object):
     """emulate a Folder"""
     _columns = ["name", "mod", "hash"]
-    CONTENTFILEPATH = ".content"
+    CONTENTFILEPATH = ".gyt"
 
     def __init__(self, *args, **kwargs):
         self.path = kwargs.get("path") or os.getcwd()
