@@ -14,6 +14,7 @@ class Folder(object):
     def __init__(self, *args, **kwargs):
         self.path = kwargs.get("path") or os.getcwd()
         self._content = pd.DataFrame(columns=self._columns)
+        self._content.index.name = 'idx'
         self.load()
 
         self._metadata = kwargs.get("metadata") or {}
@@ -55,6 +56,7 @@ class Folder(object):
     def get_content(self, path):
         content = self.content
         df0 = pd.DataFrame(columns=self._columns)
+        df0.index.name = "idx"
         if path is None:
             return
         elif os.path.exists(path) and os.path.isdir(path):
@@ -64,26 +66,36 @@ class Folder(object):
                 if filename == self.CONTENTFILEPATH:
                     continue
                 hash = self.get_hash(os.path.join(path, filename))
-                if filename not in content.name:
-                    dfdict[uuid.uuid4()] = {"name":filename, "mod":False, "hash":hash}
+                print("!!!", filename, hash, any(content.name.isin([filename])))
+                if not any(content.name.isin([filename])):
+                    print("newfile")
+                    dfdict[uuid.uuid4().hex] = {"name":filename, "mod":False, "hash":hash}
                 elif filename not in content.name:
-                    print("file '%s' exist" % filename)
                     file_row = content[content.hash==hash]
-                    print(file_row)
+                    print("file '%s' exist" % filename, file_row.to_dict())
+                    # dfdict[file_row.idx]
+                    #print("row", file_row.to_dict())
 
             df = pd.DataFrame.from_dict(dfdict, orient="index")
-            print(df)
-            print(content)
-            self._content = content.append(df)
+            df.index.name = "idx"
+            #print(dfdict)
+            # print(df)
+            # print(content)
+            self._content = pd.concat([self._content, df])[self._columns]
+            #self._content.update(df)
 
     def dump(self):
         """dump content"""
-        self._content.to_csv(os.path.join(self.CONTENTFILEPATH))
+        self._content.to_csv(os.path.join(self.CONTENTFILEPATH), index_label="idx")
 
     def load(self):
         """load content"""
         if os.path.exists(self.CONTENTFILEPATH):
-            self._content = pd.read_csv(self.CONTENTFILEPATH)
+            df = pd.read_csv(self.CONTENTFILEPATH)
+            df.index = df["idx"]
+            # print("!!", df.head())
+            # print(df.index)
+            self._content = df[self._columns]
         return self._content
 
 if __name__ == '__main__':
