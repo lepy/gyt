@@ -11,8 +11,8 @@ def test_folder():
     projectpath = os.path.join(modulepath, foldername)
 
     contentfilepath = os.path.join(projectpath, gyt.folder.Folder.CONTENTFILENAME)
-    if os.path.exists(contentfilepath):
-        os.remove(contentfilepath)
+    # if os.path.exists(contentfilepath):
+    #     os.remove(contentfilepath)
 
     newfile = os.path.join(projectpath, "new.txt")
     readme = os.path.join(projectpath, "README")

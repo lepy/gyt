@@ -78,7 +78,7 @@ class Folder(object):
                 elif any(content.filename.isin([filename])):
                     file_row = content[content.filename==filename].iloc[0]
                     print("file '%s' exist" % filename)
-                    print("!", (file_row.name, file_row["filename"]))
+                    # print("!", (file_row.name, file_row["filename"]))
                     if file_row.hash!=hash:
                         print("file changed")
                         self._content.ix[file_row.name, 'mod'] = True
