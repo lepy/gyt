@@ -1,3 +1,4 @@
-h1. GYT
+GYT
+===
 
 just gyt
