@@ -35,7 +35,7 @@ def test_folder():
         fh.write("hello world!")
 
     with open(newfile, "w") as fh:
-        fh.write("hello world!")
+        fh.write("foo")
 
     f.get_content_status()
     print("!2", f.content)
