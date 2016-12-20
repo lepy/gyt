@@ -2,7 +2,7 @@
 
 hello world
 
-[about]
+[[about]]
 
 Please see the [project license](about.md#license) for further details.
 
