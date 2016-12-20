@@ -68,5 +68,5 @@ Some text to show that the reference links can follow later.
 
 ## Links
 
-* [Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+* [gyt docu](https://gyt.readthedocs.io)
 * [Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet "Cheats")
