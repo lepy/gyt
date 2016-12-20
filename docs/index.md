@@ -2,9 +2,9 @@
 
 hello world
 
-[[about]]
+* [about](./about)
 
-Please see the [project license](about.md#license) for further details.
+Please see the [project license](about) for further details.
 
 ```python
 def fn():
