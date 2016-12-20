@@ -70,3 +70,5 @@ Some text to show that the reference links can follow later.
 
 * [gyt docu](https://gyt.readthedocs.io)
 * [Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet "Cheats")
+* [You can use Markdown and reStructuredText in the same Sphinx project](https://docs.readthedocs.io/en/latest/getting_started.html#in-markdown)
+
