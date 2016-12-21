@@ -68,7 +68,7 @@ Some text to show that the reference links can follow later.
 
 ## Links
 
-* [gyt docu](https://gyt.readthedocs.io)
+* [gyt docs](https://gyt.readthedocs.io)
 * [Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet "Cheats")
 * [You can use Markdown and reStructuredText in the same Sphinx project](https://docs.readthedocs.io/en/latest/getting_started.html#in-markdown)
-
+* [Publish HTML docs in GitHub Pages](http://www.sphinx-doc.org/en/1.5.1/ext/githubpages.html)
