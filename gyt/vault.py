@@ -6,7 +6,7 @@ import logging
 import pandas as pd
 
 class Blob(object):
-    """emulate a Folder"""
+    """blob"""
 
     def __init__(self, **kwargs):
         self._metadata = kwargs.get("metadata") or {}
